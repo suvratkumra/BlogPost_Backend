@@ -1,4 +1,9 @@
 // This is the backend server
+
+// Before everything we need to have our dotenv
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 const parser = require('./utils/cloudinaryConnect');
 const app = express();
@@ -7,8 +12,10 @@ const homePageController = require('./controller/routerController');
 
 // starting the db.
 const connect = require('./utils/dbConnect');
+const bodyParser = require('body-parser');
 
 connect();
+
 
 // middlewares
 app.use(express.json());
@@ -18,8 +25,14 @@ app.set("view engine", "ejs");
 
 app.use(express.static("public"));
 
+// for post requests
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", homePageController);
+
+app.post("/login", async (req, res) => {
+    console.log(req.body);
+})
 
 // app.post("/post", parser.single('image'), async (req, res) => {
 //     // res.render("home");
