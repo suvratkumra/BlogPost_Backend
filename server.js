@@ -8,6 +8,14 @@ const express = require('express');
 const parser = require('./utils/cloudinaryConnect');
 const app = express();
 
+// creating the session so that the server can remember the user
+const session = require('express-session');
+app.use(session({
+    secret: "HelloThisIsTheSecret",
+    resave: true,
+    saveUninitialized: true
+}))
+
 const homePageController = require('./controller/routerController');
 
 // starting the db.
