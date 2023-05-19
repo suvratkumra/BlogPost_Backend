@@ -4,18 +4,21 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+const MongoStore = require('connect-mongo');
+
 const express = require('express');
 const parser = require('./utils/cloudinaryConnect');
 const app = express();
 
 // creating the session so that the server can remember the user
 const session = require('express-session');
+
 app.use(session({
     secret: "HelloThisIsTheSecret",
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    // store: MongoStore.create({ mongoUrl: process.env.MONGO_URL })
 }))
-
 const homePageController = require('./controller/routerController');
 
 // starting the db.
@@ -23,7 +26,6 @@ const connect = require('./utils/dbConnect');
 const bodyParser = require('body-parser');
 
 connect();
-
 
 // middlewares
 app.use(express.json());
@@ -39,7 +41,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", homePageController);
 
 app.post("/login", async (req, res) => {
-    console.log(req.body);
+    if(!req.session.loginUser)
+    {
+        res.status(400).json({msg: "Error you are not authorized"});
+    }
+    else 
+    {
+        res.send("You are authorized, go ahead, go bananas.");
+    }
+    console.log(req.session);
 })
 
 // app.post("/post", parser.single('image'), async (req, res) => {
