@@ -11,7 +11,7 @@ const userModel = new mongoose.Schema({
         required: true
     },
     password: {
-        type: String, 
+        type: String,
         required: true
     },
     comments: {
@@ -19,8 +19,11 @@ const userModel = new mongoose.Schema({
     },
     posts: {
         type: Array
+    },
+    profilePic: {
+        type: String
     }
-}); 
+});
 
 // adding the User model to our database.
 const User = mongoose.model("User", userModel);
