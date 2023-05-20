@@ -1,8 +1,9 @@
 const { Router } = require("express");
-const User = require("../model/model");
+const User = require("../model/userModel")
 const bcrypt = require("bcrypt");
 const protected = require("../utils/protected");
 const parser = require("../utils/cloudinaryConnect");
+const Post = require("../model/postModel");
 
 const userRouter = Router();
 
@@ -156,14 +157,18 @@ userRouter.put("/update", protected, async (req, res) => {
 // update profile picture
 userRouter.put("/update/profile-pic", protected, parser.single('file'), async (req, res) => {
     try {
-        // get the updating field from the user in the rq.body
-        const { file } = req.file;
-        if (!file) {
+        if (!req.file) {
             res.status(400).json({
                 status: "Rejected",
                 message: "No file submitted to upload"
             })
         }
+        const user = await User.findByIdAndUpdate(req.session.loginAuth, {
+            profilePic: req.file.path
+        },
+            {
+                new: true
+            });
 
         res.status(200).json({
             status: "Approved",
@@ -171,34 +176,33 @@ userRouter.put("/update/profile-pic", protected, parser.single('file'), async (r
         })
 
     } catch (err) {
-        res.status(500).json({
-            status: "Rejected",
-            message: "Server Error"
-        })
+        res.json(err);
     }
 });
 
 // update profile picture
 userRouter.put("/update/cover-pic", protected, parser.single('file'), async (req, res) => {
     try {
-        // get the updating field from the user in the rq.body
-        const { file } = req.file;
-        if (!file) {
+        if (!req.file) {
             res.status(400).json({
                 status: "Rejected",
                 message: "No file submitted to upload"
             })
         }
+        const user = await User.findByIdAndUpdate(req.session.loginAuth, {
+            coverPic: req.file.path
+        },
+            {
+                new: true
+            });
+
         res.status(200).json({
             status: "Approved",
             message: "File uploaded successfully"
         })
 
     } catch (err) {
-        res.status(500).json({
-            status: "Rejected",
-            message: "Server Error"
-        })
+        res.json(err);
     }
 });
 

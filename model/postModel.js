@@ -1,32 +1,31 @@
 const { default: mongoose } = require("mongoose");
 const database = require("../utils/dbConnect");
+const User = require("./userModel");
 
-const userModel = new mongoose.Schema({
-    email: {
+
+const postModel = new mongoose.Schema({
+    file: {
         type: String,
         required: true
     },
-    username: {
+    caption: {
         type: String,
         required: true
     },
-    password: {
+    subcaption: {
         type: String,
-        required: true
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
     },
     comments: {
         type: Array
     },
-    posts: {
-        type: Array
-    },
-    profilePic: {
-        type: String
-    }
 });
 
 // adding the User model to our database.
-const User = mongoose.model("User", userModel);
+const Post = mongoose.model("Post", postModel);
 
-module.exports = User;
+module.exports = Post;
 
