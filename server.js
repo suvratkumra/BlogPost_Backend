@@ -19,7 +19,7 @@ app.use(session({
     saveUninitialized: true,
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URL })
 }))
-const homePageController = require('./controller/routerController');
+const homePageController = require('./controller/userRouterCtrl');
 
 // starting the db.
 const connect = require('./utils/dbConnect');
