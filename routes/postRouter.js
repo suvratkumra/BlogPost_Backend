@@ -67,21 +67,92 @@ postRouter.get("/:id", async (req, res) => {
         const postId = req.params.id;
 
         // find the post by id from the databse
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate("userId");
 
-        res.status(200).json({
-            status: "Approved",
-            post: post
-        });
+        if (!post) {
+            res.status(400).json({
+                status: "Client Error",
+                message: `Post with id:${req.params.id} not found`,
+            })
+        }
+        else {
+            res.status(200).json({
+                status: "Approved",
+                post: post
+            });
+
+        }
 
     }
-    catch (Err) {
+    catch (err) {
         res.status(500).json({
             status: "Server Error",
-            message: "Some server error detected, try again later..."
+            message: "Some server error detected, try again later...",
+            error: err
         })
     }
 });
+
+// User delete his own post
+postRouter.delete("/:id", protected, async (req, res) => {
+    try {
+        if (!req.params.id) {
+            res.status(400).json({
+                status: "Client Error",
+                message: "You did not provide any id",
+            })
+        }
+        const postDeleted = await Post.findByIdAndDelete(req.params.id);
+        res.status(200).json({
+            status: "Approved",
+            message: "Post successfully deleted"
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: "Server Error",
+            message: "Some server error detected, try again later...",
+            error: err
+        })
+    }
+})
+
+// User able to update his own post.
+postRouter.put("/:id", protected, parser.single("file"), async (req, res) => {
+    try {
+        const { caption, subcaption } = req.body;
+        // console.log(caption, subcaption);
+        const postId = req.params.id;
+        const updatedPost = await Post.findByIdAndUpdate(postId, {
+            file: req.file.path,
+            caption,
+            subcaption
+        },
+            {
+                new: true
+            });
+        console.log(updatedPost);
+        if (!updatedPost) {
+            res.status(400).json({
+                status: "Client Error",
+                message: "Could not update the properties. Some error occured.",
+            })
+        }
+        else {
+            res.status(200).json({
+                status: "Approved",
+                message: "Post successfully updated",
+                post: updatedPost
+            });
+        }
+    }
+    catch (err) {
+        res.status(500).json({
+            status: "Server Error",
+            message: "Some server error detected, try again later...",
+            error: err
+        })
+    }
+})
 
 // export so that our server can use it.
 module.exports = postRouter;
