@@ -64,5 +64,17 @@ userRouter.post("/login", async (req, res) => {
 
 })
 
+// logout
+userRouter.get("/logout", async (req, res) => {
+    try {
+        // delete the session keys so that the user's id is lost
+        req.session.destroy(err => { console.log(err) });
+        res.status(200).json({ status: "Approved", message: "You have been logged out" });
+    }
+    catch (err) {
+        res.status(400).json({ status: "Rejected", message: "There was some error logging you out, try again." });
+    }
+})
+
 // export so that our server can use it.
 module.exports = userRouter;
