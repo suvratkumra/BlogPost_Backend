@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const User = require("../model/model");
 const bcrypt = require("bcrypt");
-const protected = require("../utils/protected")
+const protected = require("../utils/protected");
+const parser = require("../utils/cloudinaryConnect");
 
 const userRouter = Router();
 
@@ -152,6 +153,54 @@ userRouter.put("/update", protected, async (req, res) => {
     }
 })
 
+// update profile picture
+userRouter.put("/update/profile-pic", protected, parser.single('file'), async (req, res) => {
+    try {
+        // get the updating field from the user in the rq.body
+        const { file } = req.file;
+        if (!file) {
+            res.status(400).json({
+                status: "Rejected",
+                message: "No file submitted to upload"
+            })
+        }
+
+        res.status(200).json({
+            status: "Approved",
+            message: "File uploaded successfully"
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            status: "Rejected",
+            message: "Server Error"
+        })
+    }
+});
+
+// update profile picture
+userRouter.put("/update/cover-pic", protected, parser.single('file'), async (req, res) => {
+    try {
+        // get the updating field from the user in the rq.body
+        const { file } = req.file;
+        if (!file) {
+            res.status(400).json({
+                status: "Rejected",
+                message: "No file submitted to upload"
+            })
+        }
+        res.status(200).json({
+            status: "Approved",
+            message: "File uploaded successfully"
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            status: "Rejected",
+            message: "Server Error"
+        })
+    }
+});
 
 // logout
 userRouter.get("/logout", protected, async (req, res) => {
