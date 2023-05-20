@@ -17,13 +17,14 @@ app.use(session({
     secret: "HelloThisIsTheSecret",
     resave: true,
     saveUninitialized: true,
-    // store: MongoStore.create({ mongoUrl: process.env.MONGO_URL })
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL })
 }))
 const homePageController = require('./controller/routerController');
 
 // starting the db.
 const connect = require('./utils/dbConnect');
 const bodyParser = require('body-parser');
+const userRouter = require('./routes/userRouter');
 
 connect();
 
@@ -38,23 +39,29 @@ app.use(express.static("public"));
 // for post requests
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get("/", homePageController);
+// setting up all the endpoints for the users
+app.use("/users", userRouter);
 
-app.post("/login", async (req, res) => {
-    if(!req.session.loginUser)
-    {
-        res.status(400).json({msg: "Error you are not authorized"});
-    }
-    else 
-    {
-        res.send("You are authorized, go ahead, go bananas.");
-    }
-    console.log(req.session);
-})
 
-// app.post("/post", parser.single('image'), async (req, res) => {
-//     // res.render("home");
-//     res.json(req.file);
+
+//--------------------------------------------------------------------------------------
+// app.get("/", homePageController);
+// app.post("/login", async (req, res) => {
+//     if(!req.session.loginUser)
+//     {
+//         res.status(400).json({msg: "Error you are not authorized"});
+//     }
+//     else 
+//     {
+//         res.send("You are authorized, go ahead, go bananas.");
+//     }
+//     console.log(req.session);
 // })
+
+// // app.post("/post", parser.single('image'), async (req, res) => {
+// //     // res.render("home");
+// //     res.json(req.file);
+// // })
+//--------------------------------------------------------------------------------------
 
 app.listen(3000 || process.env.PORT, ()=>console.log("Server connected"))
