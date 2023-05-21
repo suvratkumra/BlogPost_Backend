@@ -88,7 +88,7 @@ const getCommentByIdCtrl = async (req, res) => {
     }
 };
 
-const deleteCommentById = async (req, res) => {
+const deleteCommentByIdCtrl = async (req, res) => {
     try {
         if (!req.params.id) {
             res.status(400).json({
@@ -118,4 +118,4 @@ const deleteCommentById = async (req, res) => {
     }
 };
 
-module.exports = { getAllCommentsCtrl, createCommentCtrl, deleteCommentById, getCommentByIdCtrl, }
+module.exports = { getAllCommentsCtrl, createCommentCtrl, deleteCommentByIdCtrl, getCommentByIdCtrl, }

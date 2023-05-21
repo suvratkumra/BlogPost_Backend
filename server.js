@@ -45,6 +45,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // use the global error handler
 app.use(globalError);
 
+app.get("/home", (req, res) => {
+    res.render("home");
+})
+
 // setting up all the endpoints for the users
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
