@@ -42,7 +42,5 @@ userRouter.put("/update/cover-pic", protected, parser.single('file'), updateCove
 // logout
 userRouter.get("/logout", protected, logoutCtrl)
 
-
-
 // export so that our server can use it.
 module.exports = userRouter;

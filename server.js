@@ -27,6 +27,7 @@ const bodyParser = require('body-parser');
 const userRouter = require('./routes/userRouter');
 const globalError = require('./errorHandling/globalErrorHandler');
 const postRouter = require('./routes/postRouter');
+const commentRouter = require('./routes/commentRouter');
 
 connect();
 
@@ -47,5 +48,6 @@ app.use(globalError);
 // setting up all the endpoints for the users
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
+app.use("/comments", commentRouter);
 
 app.listen(3000 || process.env.PORT, () => console.log("Server connected"))

@@ -19,9 +19,7 @@ const postModel = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
-    comments: {
-        type: Array
-    },
+    comments: [{ type: mongoose.Schema.Types.ObjectId }],
 });
 
 // adding the User model to our database.

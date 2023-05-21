@@ -88,26 +88,28 @@ const profileCtrl = async (req, res) => {
 };
 
 const profileByIdCtrl = async (req, res) => {
-    async (req, res) => {
-        try {
+    try {
 
-            // get the information about the user using their id.
-            const userInfo = await User.findById(req.params.id);
-            console.log(userInfo);
-            if (userInfo) {
-                res.status(200).json({
-                    status: "Approved",
-                    user: userInfo
-                });
-            }
-        } catch (err) {
-            res.status(400).json({
-                status: "Rejected",
-                message: "Invalid ID"
-            })
+        // get the information about the user using their id.
+        const userInfo = await User.findById(req.params.id);
+        console.log(userInfo);
+        if (userInfo) {
+            res.status(200).json({
+                status: "Approved",
+                user: userInfo
+            });
         }
+        else {
+            res.send("No");
+        }
+    } catch (err) {
+        res.status(400).json({
+            status: "Rejected",
+            message: "Invalid ID"
+        })
     }
 }
+
 
 const updateUserProfileCtrl = async (req, res) => {
     try {
